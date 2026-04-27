@@ -1,6 +1,6 @@
 # notification-email-server
 
-Servidor de push notifications para o app KingHost Email. Monitora caixas de entrada via **IMAP IDLE** e envia notificações para dispositivos móveis via **Firebase FCM v1 API**.
+Servidor de push notifications para clientes de email móveis. Monitora caixas de entrada via **IMAP IDLE** e envia notificações para dispositivos móveis via **Firebase FCM v1 API**.
 
 ```
 App Flutter registra dispositivo
@@ -78,12 +78,12 @@ Registra um dispositivo para receber notificações.
 ```json
 {
   "fcm_token":    "token-do-firebase-sdk",
-  "email_address":"user@kinghost.com.br",
+  "email_address":"user@example.com",
   "display_name": "João Silva",
-  "imap_host":    "imap.kinghost.com.br",
+  "imap_host":    "imap.example.com",
   "imap_port":    993,
   "imap_ssl":     true,
-  "imap_user":    "user@kinghost.com.br",
+  "imap_user":    "user@example.com",
   "imap_password":"senha"
 }
 ```
