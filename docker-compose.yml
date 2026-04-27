@@ -1,0 +1,63 @@
+services:
+  hyperf:
+    container_name: hyperf
+    image: hyperf
+    build:
+      dockerfile: dev.Dockerfile
+      args:
+        UID: 1000
+        GID: 1000
+    volumes:
+      - ./:/opt/www
+    ports:
+      - 9501:9501
+    environment:
+      - APP_ENV=dev
+      - SCAN_CACHEABLE=false
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - notification-net
+
+  mysql:
+    image: mysql:8.0
+    container_name: notification-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: notifications
+      MYSQL_USER: hyperf
+      MYSQL_PASSWORD: secret
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - notification-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: notification-redis
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - notification-net
+
+volumes:
+  mysql-data:
+
+networks:
+  notification-net:
+    name: notification-net
